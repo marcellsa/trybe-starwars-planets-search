@@ -4,10 +4,11 @@ import GlobalContext from './GlobalContext';
 
 function GlobalProvider({ children }) {
   const [data, setData] = useState(null);
+  const [name, setName] = useState('');
 
-  const contextValue = useMemo(() => ({
-    data,
-  }), [data]);
+  const handleName = ({ target }) => {
+    setName(target.value);
+  };
 
   useEffect(() => {
     const requestAPI = async () => {
@@ -22,6 +23,12 @@ function GlobalProvider({ children }) {
     };
     requestAPI();
   }, []);
+
+  const contextValue = useMemo(() => ({
+    data,
+    name,
+    handleName,
+  }), [data, name]);
 
   return (
     <GlobalContext.Provider value={ contextValue }>

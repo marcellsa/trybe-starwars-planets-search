@@ -2,10 +2,24 @@ import React, { useContext } from 'react';
 import GlobalContext from '../context/GlobalContext';
 
 function Table() {
-  const { data } = useContext(GlobalContext);
+  const { data, name, handleName } = useContext(GlobalContext);
 
   return (
     <main>
+      <h4>Projeto Star Wars - Trybe</h4>
+      <form>
+        <label htmlFor="name-filter">
+          <input
+            data-testid="name-filter"
+            type="text"
+            name="name"
+            id="name"
+            value={ name }
+            onChange={ handleName }
+          />
+        </label>
+      </form>
+
       <table>
         <thead>
           <tr>
@@ -25,23 +39,24 @@ function Table() {
           </tr>
         </thead>
         <tbody>
-          {data?.map((info) => (
-            <tr key={ info.name }>
-              <td>{info.name}</td>
-              <td>{info.rotation_period}</td>
-              <td>{info.orbital_period}</td>
-              <td>{info.diameter}</td>
-              <td>{info.climate}</td>
-              <td>{info.gravity}</td>
-              <td>{info.terrain}</td>
-              <td>{info.surface_water}</td>
-              <td>{info.population}</td>
-              <td>{info.films.map((film) => (<p key={ film }>{film}</p>))}</td>
-              <td>{info.created}</td>
-              <td>{info.edited}</td>
-              <td>{info.url}</td>
-            </tr>
-          ))}
+          {data?.filter((planet) => planet.name.toLowerCase().includes(name))
+            .map((info) => (
+              <tr key={ info.name }>
+                <td>{info.name}</td>
+                <td>{info.rotation_period}</td>
+                <td>{info.orbital_period}</td>
+                <td>{info.diameter}</td>
+                <td>{info.climate}</td>
+                <td>{info.gravity}</td>
+                <td>{info.terrain}</td>
+                <td>{info.surface_water}</td>
+                <td>{info.population}</td>
+                <td>{info.films.map((film) => (<p key={ film }>{film}</p>))}</td>
+                <td>{info.created}</td>
+                <td>{info.edited}</td>
+                <td>{info.url}</td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </main>
