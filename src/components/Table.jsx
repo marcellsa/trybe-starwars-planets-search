@@ -2,7 +2,8 @@ import React, { useContext } from 'react';
 import GlobalContext from '../context/GlobalContext';
 
 function Table() {
-  const { data, name, handleName } = useContext(GlobalContext);
+  const { data, name, handleName, column, handleColumn, comparison, handleComparison,
+    numericInput, handleNumericInput, handleButtonFilter } = useContext(GlobalContext);
 
   return (
     <main>
@@ -18,6 +19,60 @@ function Table() {
             onChange={ handleName }
           />
         </label>
+      </form>
+
+      <form>
+        <label htmlFor="column">
+          Coluna
+          <select
+            data-testid="column-filter"
+            name="column"
+            id="column"
+            value={ column }
+            onChange={ handleColumn }
+          >
+            <option valeu="population">population</option>
+            <option valeu="orbital_period">orbital_period</option>
+            <option valeu="diameter">diameter</option>
+            <option valeu="rotation_period">rotation_period</option>
+            <option valeu="surface_water">surface_water</option>
+          </select>
+        </label>
+
+        <label htmlFor="comparison">
+          Operador
+          <select
+            data-testid="comparison-filter"
+            name="comparison"
+            id="comparison"
+            value={ comparison }
+            onChange={ handleComparison }
+          >
+            <option valeu="maior que">maior que</option>
+            <option valeu="menor que">menor que</option>
+            <option valeu="igual a">igual a</option>
+          </select>
+        </label>
+
+        <label htmlFor="numericInput">
+          <input
+            data-testid="value-filter"
+            type="number"
+            name="numericInput"
+            id="numericInput"
+            value={ numericInput }
+            onChange={ handleNumericInput }
+          />
+        </label>
+
+        <button
+          data-testid="button-filter"
+          type="button"
+          onClick={ handleButtonFilter }
+        >
+          Filtrar
+
+        </button>
       </form>
 
       <table>
@@ -39,7 +94,8 @@ function Table() {
           </tr>
         </thead>
         <tbody>
-          {data?.filter((planet) => planet.name.toLowerCase().includes(name))
+          {data?.filter((planet) => planet.name.toLowerCase()
+            .includes(name.toLowerCase()))
             .map((info) => (
               <tr key={ info.name }>
                 <td>{info.name}</td>
