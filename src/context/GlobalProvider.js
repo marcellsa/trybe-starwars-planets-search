@@ -8,6 +8,9 @@ function GlobalProvider({ children }) {
   const [column, setColumn] = useState('population');
   const [comparison, setComparison] = useState('maior que');
   const [numericInput, setNumericInput] = useState(0);
+  const [columnOptions, setColumnOptios] = useState(['population', 'orbital_period',
+    'diameter', 'rotation_period', 'surface_water']);
+  const [filtersUsed, setFiltersUsed] = useState([]);
 
   const handleName = ({ target }) => {
     setName(target.value);
@@ -25,23 +28,27 @@ function GlobalProvider({ children }) {
     setNumericInput(target.value);
   };
 
-  // criar um array para colunas, guardar um estado para guardar que filtro foi utilizado
-
   const handleButtonFilter = useCallback(() => {
     if (comparison === 'maior que') {
       const numericValuesFilter = data
         .filter((element) => Number(element[column]) > Number(numericInput));
       setData(numericValuesFilter);
+      setFiltersUsed([...filtersUsed, { column, comparison, numericInput }]);
+      setColumnOptios(() => columnOptions.filter((option) => option !== column));
     } else if (comparison === 'menor que') {
       const numericValuesFilter = data
         .filter((element) => Number(element[column]) < Number(numericInput));
       setData(numericValuesFilter);
+      setFiltersUsed([...filtersUsed, { column, comparison, numericInput }]);
+      setColumnOptios(() => columnOptions.filter((option) => option !== column));
     } else if (comparison === 'igual a') {
       const numericValuesFilter = data
         .filter((element) => Number(element[column]) === Number(numericInput));
       setData(numericValuesFilter);
+      setFiltersUsed([...filtersUsed, { column, comparison, numericInput }]);
+      setColumnOptios(() => columnOptions.filter((option) => option !== column));
     }
-  }, [column, comparison, data, numericInput]);
+  }, [column, comparison, data, numericInput, filtersUsed, columnOptions]);
 
   useEffect(() => {
     const requestAPI = async () => {
@@ -68,7 +75,8 @@ function GlobalProvider({ children }) {
     numericInput,
     handleNumericInput,
     handleButtonFilter,
-  }), [data, name, column, comparison, numericInput, handleButtonFilter]);
+    columnOptions,
+  }), [data, name, column, comparison, numericInput, handleButtonFilter, columnOptions]);
 
   return (
     <GlobalContext.Provider value={ contextValue }>

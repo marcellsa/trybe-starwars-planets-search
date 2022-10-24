@@ -3,7 +3,8 @@ import GlobalContext from '../context/GlobalContext';
 
 function Table() {
   const { data, name, handleName, column, handleColumn, comparison, handleComparison,
-    numericInput, handleNumericInput, handleButtonFilter } = useContext(GlobalContext);
+    numericInput, handleNumericInput, handleButtonFilter,
+    columnOptions } = useContext(GlobalContext);
 
   return (
     <main>
@@ -31,11 +32,14 @@ function Table() {
             value={ column }
             onChange={ handleColumn }
           >
-            <option valeu="population">population</option>
+            {columnOptions.map((option) => (
+              <option key={ option } valeu={ option }>{option}</option>
+            ))}
+            {/* <option valeu="population">population</option>
             <option valeu="orbital_period">orbital_period</option>
             <option valeu="diameter">diameter</option>
             <option valeu="rotation_period">rotation_period</option>
-            <option valeu="surface_water">surface_water</option>
+            <option valeu="surface_water">surface_water</option> */}
           </select>
         </label>
 
