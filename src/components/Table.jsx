@@ -4,7 +4,9 @@ import GlobalContext from '../context/GlobalContext';
 function Table() {
   const { data, name, handleName, column, handleColumn, comparison, handleComparison,
     numericInput, handleNumericInput, handleButtonFilter,
-    columnOptions } = useContext(GlobalContext);
+    columnOptions, filtersUsed } = useContext(GlobalContext);
+
+  console.log(filtersUsed);
 
   return (
     <main>
@@ -23,6 +25,19 @@ function Table() {
       </form>
 
       <form>
+        {filtersUsed?.map((filter) => (
+          <div data-testid="filter" key={ filter.column }>
+            <p>
+              {filter.column}
+              {' '}
+              {filter.comparison}
+              {' '}
+              {filter.numericInput}
+            </p>
+            <button type="button">X</button>
+            but
+          </div>
+        ))}
         <label htmlFor="column">
           Coluna
           <select

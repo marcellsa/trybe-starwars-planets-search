@@ -35,18 +35,21 @@ function GlobalProvider({ children }) {
       setData(numericValuesFilter);
       setFiltersUsed([...filtersUsed, { column, comparison, numericInput }]);
       setColumnOptios(() => columnOptions.filter((option) => option !== column));
+      setColumn(columnOptions[0]);
     } else if (comparison === 'menor que') {
       const numericValuesFilter = data
         .filter((element) => Number(element[column]) < Number(numericInput));
       setData(numericValuesFilter);
       setFiltersUsed([...filtersUsed, { column, comparison, numericInput }]);
       setColumnOptios(() => columnOptions.filter((option) => option !== column));
+      setColumn(columnOptions[0]);
     } else if (comparison === 'igual a') {
       const numericValuesFilter = data
         .filter((element) => Number(element[column]) === Number(numericInput));
       setData(numericValuesFilter);
       setFiltersUsed([...filtersUsed, { column, comparison, numericInput }]);
       setColumnOptios(() => columnOptions.filter((option) => option !== column));
+      setColumn(columnOptions[0]);
     }
   }, [column, comparison, data, numericInput, filtersUsed, columnOptions]);
 
@@ -76,7 +79,9 @@ function GlobalProvider({ children }) {
     handleNumericInput,
     handleButtonFilter,
     columnOptions,
-  }), [data, name, column, comparison, numericInput, handleButtonFilter, columnOptions]);
+    filtersUsed,
+  }), [data, name, column, comparison, numericInput,
+    handleButtonFilter, columnOptions, filtersUsed]);
 
   return (
     <GlobalContext.Provider value={ contextValue }>
