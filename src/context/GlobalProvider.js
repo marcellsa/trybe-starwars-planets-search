@@ -29,6 +29,7 @@ function GlobalProvider({ children }) {
   };
 
   const handleButtonFilter = useCallback(() => {
+    console.log(data);
     if (comparison === 'maior que') {
       const numericValuesFilter = data
         .filter((element) => Number(element[column]) > Number(numericInput));
@@ -43,7 +44,7 @@ function GlobalProvider({ children }) {
       setFiltersUsed([...filtersUsed, { column, comparison, numericInput }]);
       setColumnOptios(() => columnOptions.filter((option) => option !== column));
       setColumn(columnOptions[0]);
-    } else if (comparison === 'igual a') {
+    } else {
       const numericValuesFilter = data
         .filter((element) => Number(element[column]) === Number(numericInput));
       setData(numericValuesFilter);
@@ -55,14 +56,10 @@ function GlobalProvider({ children }) {
 
   useEffect(() => {
     const requestAPI = async () => {
-      try {
-        const response = await fetch('https://swapi.dev/api/planets');
-        const { results } = await response.json();
-        const resultsWoResidentsColumn = results.map(({ residents, ...obj }) => obj);
-        setData(resultsWoResidentsColumn);
-      } catch (error) {
-        throw new Error('API REQUEST ERROR');
-      }
+      const response = await fetch('https://swapi.dev/api/planets');
+      const { results } = await response.json();
+      const resultsWoResidentsColumn = results.map(({ residents, ...obj }) => obj);
+      setData(resultsWoResidentsColumn);
     };
     requestAPI();
   }, []);

@@ -1,13 +1,17 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import App from '../App';
 import userEvent from '@testing-library/user-event';
 
 describe('Testando componente Table', () => {
-  test('1) Se tabela é preenchida com as informações dos planetas', () => {
+  test('1) Se tabela é preenchida com as informações dos planetas', async () => {
     render(<App />);
 
-    setTimeout(() => {
+    await waitFor(() => {
+      expect(screen.getAllByRole('row').length).toBe(11);
+    }, {timeout: 60000})
+
+    
       const firstPlanet = screen.getByText(/tatooine/i);
       expect(firstPlanet).toBeInTheDocument();
 
@@ -16,33 +20,42 @@ describe('Testando componente Table', () => {
 
       const dagobahClimate = screen.getByText(/kamino/i);
       expect(dagobahClimate).toBeInTheDocument();
-    }, 3000);
+    
   });
 
-  test('2) Se possível digitar no input name', () => {
+  test('2) Se possível digitar no input name', async () => {
     render(<App />);
+
+    await waitFor(() => {
+      expect(screen.getAllByRole('row').length).toBe(11);
+    }, {timeout: 60000})
+
     const name = 'Hoth';
     const nameInput = screen.getByTestId('name-filter');
     expect(nameInput).toBeInTheDocument();
 
     userEvent.type(nameInput, name);
 
-    setTimeout(() => {
+    
       const planet = screen.getByText(/hoth/i);
       expect(planet).toBeInTheDocument();
-    }, 3000)
+    
   });
 
-  test('3) Se o botão de filtro funciona', () => {
+  jest.setTimeout(600000)
+  test('3) Se o botão de filtro funciona', async () => {
     render(<App />);
-    const columnOption = 'diamenter';
+    const columnOption = 'diameter';
     const operatorOption = 'menor que';
     const numericValue = '10000';
 
-    
-    userEvent.selectOptions(screen.getByTestId('column-filter'),[columnOption]);
-    userEvent.selectOptions(screen.getByTestId('comparison-filter'),[operatorOption]);
-    
+    userEvent.selectOptions(screen.getByTestId('column-filter'), columnOption);
+    userEvent.selectOptions(screen.getByTestId('comparison-filter'), operatorOption);
+
+    await waitFor(() => {
+      expect(screen.getAllByRole('row').length).toBe(11);
+    }, {timeout: 60000})
+
     const numericInput = screen.getByTestId('value-filter');
     userEvent.type(numericInput, numericValue);
 
@@ -50,14 +63,64 @@ describe('Testando componente Table', () => {
     expect(filterButton).toBeInTheDocument();
 
     userEvent.click(filterButton);
-    
-    setTimeout(() => {
-      const planet1 = screen.getByText(/hoth/i);
-      expect(planet1).toBeInTheDocument();
-      const planet2 = screen.getByText(/Endor/i);
-      expect(planet2).toBeInTheDocument();
-      const planet3 = screen.getByText(/tatooine/i);
-      expect(planet3).not.toBeInTheDocument();
-    }, 3000)
-  });
+
+    await waitFor(() => {
+      expect(screen.getAllByRole('row').length).toBe(4);
+    }, {timeout: 60000})
+  
+  }, 130000);
+
+  test('4) Se o botão de filtro funciona', async () => {
+    render(<App />);
+    const columnOption = 'population';
+    const operatorOption = 'maior que';
+    const numericValue = '1000';
+
+    userEvent.selectOptions(screen.getByTestId('column-filter'), columnOption);
+    userEvent.selectOptions(screen.getByTestId('comparison-filter'), operatorOption);
+
+    await waitFor(() => {
+      expect(screen.getAllByRole('row').length).toBe(11);
+    }, {timeout: 60000})
+
+    const numericInput = screen.getByTestId('value-filter');
+    userEvent.type(numericInput, numericValue);
+
+    const filterButton = screen.getByTestId('button-filter')
+    expect(filterButton).toBeInTheDocument();
+
+    userEvent.click(filterButton);
+
+    await waitFor(() => {
+      expect(screen.getAllByRole('row').length).toBe(8);
+    }, {timeout: 60000})
+  
+  }, 130000);
+
+  test('5) Se o botão de filtro funciona', async () => {
+    render(<App />);
+    const columnOption = 'surface_water';
+    const operatorOption = 'igual a';
+    const numericValue = '100';
+
+    userEvent.selectOptions(screen.getByTestId('column-filter'), columnOption);
+    userEvent.selectOptions(screen.getByTestId('comparison-filter'), operatorOption);
+
+    await waitFor(() => {
+      expect(screen.getAllByRole('row').length).toBe(11);
+    }, {timeout: 60000})
+
+    const numericInput = screen.getByTestId('value-filter');
+    userEvent.type(numericInput, numericValue);
+
+    const filterButton = screen.getByTestId('button-filter')
+    expect(filterButton).toBeInTheDocument();
+
+    userEvent.click(filterButton);
+
+    await waitFor(() => {
+      expect(screen.getAllByRole('row').length).toBe(3);
+    }, {timeout: 60000})
+  
+  }, 130000);
 })
